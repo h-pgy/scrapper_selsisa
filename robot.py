@@ -96,7 +96,12 @@ class BaseRobot:
         if tentativas >= max_tentativas:
             raise RuntimeError('Maximo de tentativas para abrir a janela do relatorio')
 
+    def gerar_sopa(self, driver):
+        '''Gera um beautiful soup com o html da pagina
+        que esta aberta no driver'''
 
+        soup = BeautifulSoup(driver.page_source)
 
+        return soup
 
 
