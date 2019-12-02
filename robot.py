@@ -140,9 +140,10 @@ class BaseRobot:
 
         return soup
 
-    def pegar_header(self, sopa):
+    def pegar_header(self, driver):
         '''Extrai o header do relatorio'''
 
+        sopa = self.gerar_sopa(driver)
         parsed = []
         ancora = sopa.find(text='Unidade')
         header = ancora.parent.parent.parent
@@ -187,4 +188,14 @@ class BaseRobot:
                     rows.append(new_row)
                     new_row = []
         return rows
+
+    def parsear_pagina(self, driver, header):
+        '''Parseia os dados da pagina de relatorio'''
+
+        sopa = gerar_sopa(driver)
+        tabela = pegar_tabela(sopa)
+        rows = pegar_table_rows(tabela)
+        pag = parsear_table_rows(header, rows)
+
+        return pag
 
