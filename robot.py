@@ -25,24 +25,44 @@ class BaseRobot:
 
         self._wait_login(driver, 'ctl00_Principal_lblNmUsuario')
 
-    def login(self, driver, senha, usuario):
-        '''Realiza o processo de login'''
+    def entrar_selsisa(self, driver):
 
         driver.get('http://web4.prodam/sd0241_spmf/forms/frmLogin.aspx')
 
-        hierarquia = driver.find_element_by_name('ctl00$Principal$txtHierarquia')
-        user = driver.find_element_by_name('ctl00$Principal$txtUsuario')
-        passw = driver.find_element_by_name('ctl00$Principal$txtSenha')
+    def preencher_hierarquia(self, driver):
 
+        hierarquia = driver.find_element_by_name('ctl00$Principal$txtHierarquia')
         hierarquia.send_keys('selsisa')
-        user.click()
-        self._wait_hierarquia(driver)
+        user = driver.find_element_by_name('ctl00$Principal$txtUsuario')
+        user.click() #clica no usuario para tirar do preenchimento - assim sistema faz a validacao da hierarquia
+        self._wait_hierarquia(driver) #espera para ver se a validacao ocorreu (nao checa o resultado dela)
+
+    def preencher_user(self, driver, usuario):
+
+        user = driver.find_element_by_name('ctl00$Principal$txtUsuario')
         user.send_keys(usuario)
-        passw.click()
-        self._wait_usuario(driver)
+        passw = driver.find_element_by_name('ctl00$Principal$txtSenha')
+        passw.click() #clica no passw para tirar do preenchimento - assim o sistema valida o usuario
+        self._wait_usuario(driver) #espera para ver se a validacao ocorreu (nao checa o resultado dela)
+
+    def preencher_passw(self, driver, senha):
+        passw = driver.find_element_by_name('ctl00$Principal$txtSenha')
         passw.send_keys(senha)
+
+    def clicar_botao_login(self, driver):
+
         botao_ok = driver.find_element_by_name('ctl00$Principal$btnLogin')
         botao_ok.click()
+
+    def login(self, driver, usuario, senha):
+        '''Realiza o processo de login'''
+
+        self.entrar_selsisa(driver)
+        self.preencher_hierarquia(driver)
+        self.preencher_user(driver,usuario)
+        self.preencher_passw(driver,senha)
+        self.clicar_botao_login(driver)
+
 
     def entrar_menu_relatorio(self, driver):
         '''Entra no menu de Relatório do sistema, na pagina após o login'''
