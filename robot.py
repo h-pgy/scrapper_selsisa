@@ -6,7 +6,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
 import time
 import pandas as pd
-from collections import OrderedDict
 
 class BaseRobot:
 
@@ -109,7 +108,9 @@ class BaseRobot:
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, 'ctl00_Principal_txtDtInicial')))
         inicial = driver.find_element_by_id('ctl00_Principal_txtDtInicial')
+        inicial.clear()
         final = driver.find_element_by_id('ctl00_Principal_txtDtFinal')
+        final.clear()
         botao_consulta = driver.find_element_by_id('ctl00_Principal_btnConsultar')
         inicial.send_keys(data_inici)
         final.send_keys(data_final)
@@ -269,10 +270,10 @@ class BaseRobot:
         self.entrar_menu_relatorio(driver)
         self.entrar_relatorio_aprovados(driver)
 
-    def extrair_dados_periodo(self, driver, data_ini, data_fim, file_result = None):
+    def extrair_dados_periodo(self, driver, data_ini, data_fim, file_result = None, max_tentativas= 1000):
 
         self.preencher_datas(driver, data_ini, data_fim)
-        self.mudar_para_relatorio(driver, max_tentativas=100)
+        self.mudar_para_relatorio(driver, max_tentativas=max_tentativas)
         header, data = self.parsear_todas_paginas(driver)
         self.fechar_jan_rel(driver)
         df = pd.DataFrame(data = data, columns = header)
