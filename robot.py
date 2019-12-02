@@ -124,4 +124,24 @@ class BaseRobot:
         botao_next = driver.find_element_by_id(id_botao_next)
         botao_next.click()
 
+    def total_paginas(self, driver):
+        '''Obtem o total de paginas do relatorio'''
+
+        id_total_pag = 'ReportViewer1_ctl05_ctl00_TotalPages'
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, id_total_pag)))
+        total_pag = driver.find_element_by_id(id_total_pag)
+        total_pag = int(total_pag.text)
+
+        return total_pag
+
+    def pegar_num_pag_atual(self, driver):
+        '''Obtem o numero de pagina atual no pop up do relatorio'''
+
+        input_pag = driver.find_element_by_name('ReportViewer1$ctl05$ctl00$CurrentPage')
+        num_pag = input_pag.get_attribute('value')
+
+        return int(num_pag)
+
+
 
