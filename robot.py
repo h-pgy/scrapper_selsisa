@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
 import time
+import pandas as pd
 from collections import OrderedDict
 
 class BaseRobot:
@@ -171,7 +172,7 @@ class BaseRobot:
         '''Gera um beautiful soup com o html da pagina
         que esta aberta no driver'''
 
-        soup = BeautifulSoup(driver.page_source)
+        soup = BeautifulSoup(driver.page_source, 'lxml')
 
         return soup
 
@@ -228,10 +229,10 @@ class BaseRobot:
         '''Parseia os dados da pagina de relatorio, em excecao
         do header que soh aparece na primeira pagina'''
 
-        sopa = gerar_sopa(driver)
-        tabela = pegar_tabela(sopa)
-        rows = pegar_table_rows(tabela)
-        pag = parsear_table_rows(tamanho_linha, rows)
+        sopa = self.gerar_sopa(driver)
+        tabela = self.pegar_tabela(sopa)
+        rows = self.pegar_table_rows(tabela)
+        pag = self.parsear_table_rows(tamanho_linha, rows)
 
         return pag
 
@@ -247,16 +248,38 @@ class BaseRobot:
         for i in range(total_pag):
 
             pag_atual = self.pegar_num_pag_atual(driver)
-            assert i == pag_atual
+            #assert i == pag_atual
             linhas = self.parsear_pagina(driver, tamanho_linha)
             data.extend(linhas)
 
         return header, data
 
-    def pipeline_pag_relatorios(self, usuario, senha):
+    def fechar_jan_rel(self, driver):
+        '''Fecha a janela de relatorio e retorna para
+        a janela anterior'''
 
-        self.logiin(driver, usuario, senha)
+        janela_original = driver.window_handles[0]
+        driver.close()
+        driver.switch_to.window(janela_original)
 
+    def ir_pag_relatorios_aprovados(self, driver, usuario, senha):
+        '''Implementa o pipeline para ir ate a pagina de relatorios'''
 
+        self.login(driver, usuario, senha)
+        self.entrar_menu_relatorio(driver)
+        self.entrar_relatorio_aprovados(driver)
+
+    def extrair_dados_periodo(self, driver, data_ini, data_fim, file_result = None):
+
+        self.preencher_datas(driver, data_ini, data_fim)
+        self.mudar_para_relatorio(driver, max_tentativas=100)
+        header, data = self.parsear_todas_paginas(driver)
+        self.fechar_jan_rel(driver)
+        df = pd.DataFrame(data = data, columns = header)
+        if file_result:
+            df.to_excel(file_result)
+            return None
+        else:
+            return df
 
 
