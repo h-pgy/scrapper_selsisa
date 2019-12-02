@@ -26,10 +26,12 @@ class BaseRobot:
         self._wait_login(driver, 'ctl00_Principal_lblNmUsuario')
 
     def entrar_selsisa(self, driver):
+        '''Faz a requisicao para entrar na URL do selsisa intranet'''
 
         driver.get('http://web4.prodam/sd0241_spmf/forms/frmLogin.aspx')
 
     def preencher_hierarquia(self, driver):
+        'Preenche a informacao de hierarquia no formulario de login'
 
         hierarquia = driver.find_element_by_name('ctl00$Principal$txtHierarquia')
         hierarquia.send_keys('selsisa')
@@ -38,6 +40,7 @@ class BaseRobot:
         self._wait_hierarquia(driver) #espera para ver se a validacao ocorreu (nao checa o resultado dela)
 
     def preencher_user(self, driver, usuario):
+        '''Preenche o identificador do usuario no formulario de login'''
 
         user = driver.find_element_by_name('ctl00$Principal$txtUsuario')
         user.send_keys(usuario)
@@ -46,10 +49,13 @@ class BaseRobot:
         self._wait_usuario(driver) #espera para ver se a validacao ocorreu (nao checa o resultado dela)
 
     def preencher_passw(self, driver, senha):
+        '''Preenche o valor do passw no formulario de login'''
+
         passw = driver.find_element_by_name('ctl00$Principal$txtSenha')
         passw.send_keys(senha)
 
     def clicar_botao_login(self, driver):
+        '''Clica no botao para fazer o login'''
 
         botao_ok = driver.find_element_by_name('ctl00$Principal$btnLogin')
         botao_ok.click()
