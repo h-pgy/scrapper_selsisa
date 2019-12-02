@@ -67,6 +67,19 @@ class BaseRobot:
         action.move_to_element(aprovados).perform()
         aprovados.click()
 
+    def preencher_datas(driver, data_inici, data_final):
+        '''Preenche as datas e clica para gerar o relatorio para este periodo'''
+
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, 'ctl00_Principal_txtDtInicial')))
+        inicial = driver.find_element_by_id('ctl00_Principal_txtDtInicial')
+        final = driver.find_element_by_id('ctl00_Principal_txtDtFinal')
+        botao_consulta = driver.find_element_by_id('ctl00_Principal_btnConsultar')
+        inicial.send_keys(data_inici)
+        final.send_keys(data_final)
+
+        botao_consulta.click()
+
 
 
 
