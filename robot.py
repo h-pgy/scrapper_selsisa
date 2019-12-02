@@ -53,4 +53,20 @@ class BaseRobot:
         head = menu.find_element_by_class_name('head')
         head.click()
 
+    def entrar_relatorio_aprovados(self, driver):
+        '''Seleciona o relatorio de alvaras aprovados e entra na pagina dele'''
+
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, 'navigation')))
+        menu = driver.find_element_by_id('navigation')
+        head = menu.find_element_by_class_name('head')
+        action = ActionChains(driver)
+        action.move_to_element(head).perform()
+        items_menu = menu.find_elements_by_tag_name('li')
+        aprovados = items_menu[1]
+        action.move_to_element(aprovados).perform()
+        aprovados.click()
+
+
+
 
