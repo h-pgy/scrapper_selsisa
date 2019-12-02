@@ -9,6 +9,15 @@ from collections import OrderedDict
 
 class BaseRobot:
 
+    def gerar_driver(self, chromedriver_path):
+        '''Funcao para gerar o driver'''
+
+        #podemos adicionar outras opcoes depois para customizar
+
+        driver = webdriver.Chrome(chromedriver_path)
+
+        return driver
+
     def _wait_login(self, driver, id_element):
         '''Abstrai as esperas necessarias para o login'''
 
@@ -244,6 +253,9 @@ class BaseRobot:
 
         return header, data
 
+    def pipeline_pag_relatorios(self, usuario, senha):
+
+        self.logiin(driver, usuario, senha)
 
 
 
