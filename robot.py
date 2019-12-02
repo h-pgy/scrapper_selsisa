@@ -67,7 +67,7 @@ class BaseRobot:
         action.move_to_element(aprovados).perform()
         aprovados.click()
 
-    def preencher_datas(driver, data_inici, data_final):
+    def preencher_datas(self, driver, data_inici, data_final):
         '''Preenche as datas e clica para gerar o relatorio para este periodo'''
 
         WebDriverWait(driver, 10).until(
@@ -79,6 +79,23 @@ class BaseRobot:
         final.send_keys(data_final)
 
         botao_consulta.click()
+
+    def mudar_para_relatorio(self, driver, max_tentativas):
+        '''Muda para a janela de popup do relatorio, com um maximo de X tentativas'''
+
+        tentativas = 0
+        while tentativas < max_tentativas:
+            try:
+                janela_relatorio = driver.window_handles[1]
+                driver.switch_to.window(janela_relatorio)
+                break
+            except IndexError:
+                tentativas += 1
+                print(tentativas)
+                time.sleep(1)
+        if tentativas >= max_tentativas:
+            raise RuntimeError('Maximo de tentativas para abrir a janela do relatorio')
+
 
 
 
