@@ -96,6 +96,13 @@ class BaseRobot:
         if tentativas >= max_tentativas:
             raise RuntimeError('Maximo de tentativas para abrir a janela do relatorio')
 
+    def esperar_dados_aparecerem(self, driver):
+        '''Metodo para esperar os dados aparecerem no pop up de relatorio'''
+
+        id_dados = 'ReportViewer1_ctl05'
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, id_dados)))
+
     def gerar_sopa(self, driver):
         '''Gera um beautiful soup com o html da pagina
         que esta aberta no driver'''
