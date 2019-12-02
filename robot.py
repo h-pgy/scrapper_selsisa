@@ -144,11 +144,47 @@ class BaseRobot:
         '''Extrai o header do relatorio'''
 
         parsed = []
-        ancora = soup.find(text='Unidade')
+        ancora = sopa.find(text='Unidade')
         header = ancora.parent.parent.parent
         for div in header.find_all('div'):
             parsed.append(div.text)
         return parsed
 
+    def pegar_tabela(self, sopa):
+        '''Pega o elemento da tabela com os dados da pagina
+        de relatorio'''
 
+        #a pagina contem 5 milhoes de tabelas, a tabela de dados eh a 38
+        table = sopa.find_all('table')[38]
+
+        return table
+
+    def pegar_table_rows(self, tabela):
+        '''Extrai as linhas da tabela de dados'''
+
+        trs = tabela.find_all('tr')[1:]
+
+        return trs
+
+    def parsear_table_rows(self, tamanho_linha, trs):
+        '''Extrai as linhas da tabela, no formato de uma lista
+        de listas em que cada lista interna representa uma linha'''
+
+        rows = []
+        new_row = []
+        count = 0
+        for tr in trs:
+            tds = tr.find_all('td')[1:]
+            for td in tds:
+                div = td.find('div')
+                if div:
+                    content = div.text.strip()
+                else:
+                    content = ''
+                new_row.append(content)
+                count += 1
+                if count != 0 and count % tamanho_linha == 0:
+                    rows.append(new_row)
+                    new_row = []
+        return rows
 
