@@ -105,7 +105,7 @@ class BaseRobot:
         return soup
 
     def pegar_header(self, driver):
-        '''Funcao que extrai o header do relatorio'''
+        '''Extrai o header do relatorio'''
 
         sopa = self.gerar_sopa(driver)
         parsed = []
@@ -114,5 +114,14 @@ class BaseRobot:
         for div in header.find_all('div'):
             parsed.append(div.text)
         return parsed
+
+    def proxima_pagina(self, driver):
+        '''Muda de pagina dentro do pop up do relatorio (next page)'''
+
+        id_botao_next = 'ReportViewer1_ctl05_ctl00_Next_ctl00_ctl00'
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, id_botao_next)))
+        botao_next = driver.find_element_by_id(id_botao_next)
+        botao_next.click()
 
 
