@@ -104,4 +104,15 @@ class BaseRobot:
 
         return soup
 
+    def pegar_header(self, driver):
+        '''Funcao que extrai o header do relatorio'''
+
+        sopa = self.gerar_sopa(driver)
+        parsed = []
+        ancora = soup.find(text='Unidade')
+        header = ancora.parent.parent.parent
+        for div in header.find_all('div'):
+            parsed.append(div.text)
+        return parsed
+
 
