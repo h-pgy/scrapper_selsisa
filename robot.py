@@ -103,24 +103,6 @@ class BaseRobot:
         WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, id_dados)))
 
-    def gerar_sopa(self, driver):
-        '''Gera um beautiful soup com o html da pagina
-        que esta aberta no driver'''
-
-        soup = BeautifulSoup(driver.page_source)
-
-        return soup
-
-    def pegar_header(self, driver):
-        '''Extrai o header do relatorio'''
-
-        sopa = self.gerar_sopa(driver)
-        parsed = []
-        ancora = soup.find(text='Unidade')
-        header = ancora.parent.parent.parent
-        for div in header.find_all('div'):
-            parsed.append(div.text)
-        return parsed
 
     def proxima_pagina(self, driver):
         '''Muda de pagina dentro do pop up do relatorio (next page)'''
@@ -149,6 +131,24 @@ class BaseRobot:
         num_pag = input_pag.get_attribute('value')
 
         return int(num_pag)
+
+    def gerar_sopa(self, driver):
+        '''Gera um beautiful soup com o html da pagina
+        que esta aberta no driver'''
+
+        soup = BeautifulSoup(driver.page_source)
+
+        return soup
+
+    def pegar_header(self, sopa):
+        '''Extrai o header do relatorio'''
+
+        parsed = []
+        ancora = soup.find(text='Unidade')
+        header = ancora.parent.parent.parent
+        for div in header.find_all('div'):
+            parsed.append(div.text)
+        return parsed
 
 
 
