@@ -189,13 +189,36 @@ class BaseRobot:
                     new_row = []
         return rows
 
-    def parsear_pagina(self, driver, header):
-        '''Parseia os dados da pagina de relatorio'''
+    def parsear_pagina(self, driver, tamanho_linha):
+        '''Parseia os dados da pagina de relatorio, em excecao
+        do header que soh aparece na primeira pagina'''
 
         sopa = gerar_sopa(driver)
         tabela = pegar_tabela(sopa)
         rows = pegar_table_rows(tabela)
-        pag = parsear_table_rows(header, rows)
+        pag = parsear_table_rows(tamanho_linha, rows)
 
         return pag
+
+    def parsear_todas_paginas(self, driver):
+        '''Pega todas as paginas de um determinado relatorio e retorna
+        a lista com os nomes das colunas e uma lista de listas com as
+        linhas (dados)'''
+
+        data = []
+        total_pag = self.total_paginas(driver)
+        header = self.pegar_header(driver)
+        tamanho_linha = len(header)
+        for i in range(total_pag):
+
+            pag_atual = self.pegar_num_pag_atual(driver)
+            assert i == pag_atual
+            linhas = self.parsear_pagina(driver, tamanho_linha)
+            data.extend(linhas)
+
+        return header, data
+
+
+
+
 
