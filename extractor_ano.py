@@ -3,11 +3,13 @@ from robot import BaseRobot
 
 class ExtratorAno(BaseRobot):
 
-    def __init__(self, driver, ano):
+    def __init__(self, driver, ano, usuario, senha):
 
         self.driver = driver
         self.ano = ano
         self.periodos = self.gerar_periodos(self.ano)
+        self.senha = senha
+        self.usuario = usuario
 
     def pegar_fim_meses(self, ano):
 
@@ -80,7 +82,7 @@ class ExtratorAno(BaseRobot):
 
         return periodos
 
-    def extrair_ano(self, periodos = None):
+    def extrair_ano(self, driver, periodos = None):
 
         if periodos is None:
             periodos = self.periodos
@@ -88,7 +90,11 @@ class ExtratorAno(BaseRobot):
         dados = []
         for dt_ini, dt_fim in periodos:
             print(dt_ini)
-            df = robo.extrair_dados_periodo(driver, dt_ini, dt_fim)
+            df = self.extrair_dados_periodo(driver, dt_ini, dt_fim)
             dados.append(df)
 
         return pd.concat(dados)
+
+    def __call__(self):
+        self.ir_pag_relatorios_aprovados(self.driver, self.usuario, self.senha)
+        return self.extrair_ano(self.driver)
