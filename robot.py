@@ -246,12 +246,14 @@ class BaseRobot:
         total_pag = self.total_paginas(driver)
         header = self.pegar_header(driver)
         tamanho_linha = len(header)
-        for i in range(total_pag):
+        for i in range(1,total_pag+1):
 
             pag_atual = self.pegar_num_pag_atual(driver)
-            #assert i == pag_atual
+            assert i == pag_atual
             linhas = self.parsear_pagina(driver, tamanho_linha)
             data.extend(linhas)
+            if i != total_pag:
+                self.proxima_pagina(driver)
 
         return header, data
 
