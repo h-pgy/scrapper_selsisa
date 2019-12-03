@@ -259,7 +259,7 @@ class BaseRobot:
             data.extend(linhas)
             if i < total_pag:
                 self.proxima_pagina(driver)
-
+        data = data[1:].copy() #retirando a primeira linha que copia o header
 
         return header, data
 
