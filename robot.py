@@ -147,7 +147,7 @@ class BaseRobot:
 
         id_botao_next = 'ReportViewer1_ctl05_ctl00_Next_ctl00_ctl00'
         WebDriverWait(driver, 10).until(
-            element_is_enabled((By.ID, id_botao_next)))
+            EC.element_to_be_clickable((By.ID, id_botao_next)))
         botao_next = driver.find_element_by_id(id_botao_next)
         botao_next.click()
 
@@ -162,17 +162,14 @@ class BaseRobot:
 
         return total_pag
 
-    def esperar_pagina_carregar(self, driver):
-        '''Espera a pagina carregar'''
-
-        input_pag = driver.find_element_by_name('ReportViewer1$ctl05$ctl00$CurrentPage')
-        element = driver.find_element_by_id("edit-save-m")
-
     def pegar_num_pag_atual(self, driver):
         '''Obtem o numero de pagina atual no pop up do relatorio'''
 
+        id_input_pag = 'ReportViewer1_ctl05_ctl00_CurrentPage'
         self.esperar_dados_aparecerem(driver)
-        input_pag = driver.find_element_by_name('ReportViewer1$ctl05$ctl00$CurrentPage')
+        WebDriverWait(driver, 10).until(
+            element_is_enabled((By.ID, id_input_pag)))
+        input_pag = driver.find_element_by_id(id_input_pag)
         num_pag = input_pag.get_attribute('value')
 
         return int(num_pag)
@@ -257,13 +254,11 @@ class BaseRobot:
         for i in range(1,total_pag+1):
             pag_atual = self.pegar_num_pag_atual(driver)
             print('pag_atual', pag_atual)
-            print(i, pag_atual)
             assert i == pag_atual
             linhas = self.parsear_pagina(driver, tamanho_linha)
             data.extend(linhas)
-            self.proxima_pagina(driver)
-            pag_atual = self.pegar_num_pag_atual(driver)
-            print('pag_atual', pag_atual)
+            if i < total_pag:
+                self.proxima_pagina(driver)
 
 
         return header, data
