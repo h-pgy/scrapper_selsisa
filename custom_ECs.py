@@ -4,9 +4,9 @@ class element_is_enabled:
   """An expectation for checking that an element is enabled.
 
   locator - used to find the element
-  returns the WebElement once it has the particular css class
+  returns the WebElement once it is enabled
   """
-  def __init__(self, locator, css_class):
+  def __init__(self, locator):
     self.locator = locator
 
   def __call__(self, driver):
