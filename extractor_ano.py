@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from robot import BaseRobot
+import pandas as pd
 
 class ExtratorAno(BaseRobot):
 
