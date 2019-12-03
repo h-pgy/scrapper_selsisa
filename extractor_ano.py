@@ -85,4 +85,10 @@ class ExtratorAno(BaseRobot):
         if periodos is None:
             periodos = self.periodos
 
-        pass
+        dados = []
+        for dt_ini, dt_fim in periodos:
+            print(dt_ini)
+            df = robo.extrair_dados_periodo(driver, dt_ini, dt_fim)
+            dados.append(df)
+
+        return pd.concat(dados)
