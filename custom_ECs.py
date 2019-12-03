@@ -11,7 +11,7 @@ class element_is_enabled:
 
   def __call__(self, driver):
     element = driver.find_element(*self.locator)   # Finding the referenced element
-    if element.is_enabled()
+    if element.is_enabled():
         return element
     else:
         return False
