@@ -1,3 +1,6 @@
-/venv/
-.config
-/.idea/
+config.py
+venv/
+dados/
+dados_fev_2020/
+.ipynb_checkpoints/
+.idea/
