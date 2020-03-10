@@ -178,7 +178,7 @@ class BaseRobot:
         '''Gera um beautiful soup com o html da pagina
         que esta aberta no driver'''
 
-        soup = BeautifulSoup(driver.page_source, 'lxml')
+        soup = BeautifulSoup(driver.page_source)
 
         return soup
 
