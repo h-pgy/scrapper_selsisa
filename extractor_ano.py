@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from robot import BaseRobot
 import pandas as pd
+from datetime import date
 
 class ExtratorAno(BaseRobot):
 
@@ -70,16 +71,34 @@ class ExtratorAno(BaseRobot):
             meses['02'] = '29'
 
         return meses
+    
+    def checar_hoje(self, hoje, ano, mes_final, dia_fim):
+        
+        if int(ano) == hoje.year and int(mes_final) == hoje.month:
+            dia_fim = hoje.day
+            flag = True
+            print('Dia de hoje está no período')
+        else:
+            flag = False
+        
+        return flag, dia_fim
+        
 
     def gerar_periodos(self, ano):
-
+        
+        hoje = date.today()
+        
         fim_meses = self.pegar_fim_meses(ano)
         periodos = []
         for mes, fim in fim_meses.items():
+            flag_hoje, dia_fim = self.checar_hoje(hoje, ano, mes, fim)
             data_ini = f'01/{mes}/{ano}'
             data_fim = f'{fim}/{mes}/{ano}'
             period = (data_ini, data_fim)
             periodos.append(period)
+            
+            if flag_hoje:
+                break
 
         return periodos
 
