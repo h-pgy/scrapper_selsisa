@@ -59,7 +59,7 @@ def extrair(anos = None, path_dados = 'dados', headless = True):
 
 if __name__ == '__main__':
 
-    extrair()
+    extrair(['2020'], 'dados_fev_2020')
 
 
 
