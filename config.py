@@ -1,9 +1,9 @@
 
 
 usuario = dict(
-    login = 'd858685', #d835916
-    senha = 'del@mo92' #pougy098
+    login = 'd835916',
+    senha = 'pougy098'
 )
 
-chromedriver_path = r'chromedriver.exe'
+chromedriver_path = r'C:/Users/d835916/chromedriver.exe'
 
